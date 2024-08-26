@@ -1,0 +1,155 @@
+/* styles.css */
+body {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+}
+.header {
+    color: #30d5f3;
+    font-size: 5rem;
+    margin-bottom: 1rem;
+
+}
+.header-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 2rem;
+}
+/* Style for the Poetica title */
+#poeticaTitle {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 100px;
+    font-weight: bold;
+    color: rgb(255, 105, 180);
+    text-align: center; 
+    margin-top: 20px;
+    letter-spacing: 3px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    animation: rgbShift 7s infinite;
+}
+.header2 {
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #555;
+    margin-top: 10px;
+}
+
+@keyframes rgbShift {
+    0% { color: rgb(255, 105, 180); }
+    25% { color: rgb(0, 191, 255); }
+    50% { color: rgb(50, 205, 50); }
+    75% { color: rgb(255, 140, 0); }
+    100% { color: rgb(255, 105, 180); }
+}
+
+#poemOutput {
+    min-height: 227px;
+    padding: 1rem;
+    background: #bbdefb;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+    overflow: auto;
+    position: relative;
+    white-space: pre-wrap;
+    overflow-y: auto;
+}
+#emotionOutput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100px;
+    margin-top: 1rem;
+}
+.emotion-animation {
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+.bottombar {
+    background-color: #26a69a;
+    width: 24%;
+    height: 25px;
+    position: fixed;
+    bottom: 0;
+    z-index: 2;
+}
+.bottombar p {
+    color: rgb(255, 255, 255);
+    margin: 0;
+    line-height: 25px;
+    text-align: center;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+#poemOutput pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.2rem;
+    display: inline-block;
+}
+
+#poemOutput pre span {
+    opacity: 0;
+    display: inline-block;
+    animation: fadeIn 0.5s forwards;
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.colorful-text {
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #66b3ff);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 5s ease infinite;
+    display: inline;
+}
+.emoji-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 5em;
+    z-index: 1000;
+    animation: popUp 1.5s ease-in-out forwards;
+}
+@keyframes popUp {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+    }
+}
