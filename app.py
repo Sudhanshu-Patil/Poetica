@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import google.generativeai as genai
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 from emotions import analyze_emotions
+import os
 app = Flask(__name__)
 @app.route('/')
 def home():
@@ -14,7 +15,7 @@ def generate_poem():
     directive = "Write a poem based on the following prompt: "
     full_prompt = f"{directive}{user_prompt}"
     try:
-        genai.configure(api_key="YOUR_API_KEY") #use your api key
+        genai.configure(api_key=os.environ.get('GEMINI_API_KEY')) #use your api key
         model = genai.GenerativeModel("gemini-1.5-flash")
         # Generate poem using Gemini with prompt
         response = model.generate_content(full_prompt)
