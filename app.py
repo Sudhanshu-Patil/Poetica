@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 import google.generativeai as genai
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 from emotions import analyze_emotions
@@ -8,6 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route('/')
 def home():
     return render_template('index.html')  
