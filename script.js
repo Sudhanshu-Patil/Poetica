@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         poemOutput.style.fontSize = '20px';
         poemOutput.style.fontWeight = 'bold';
-        fetch('/generate_poem', {
+        fetch('https://poetica-ujed.onrender.com/generate_poem', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
