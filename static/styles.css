@@ -27,6 +27,19 @@ body {
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
     animation: rgbShift 7s infinite;
 }
+@media (max-width: 768px) {
+    #poeticaTitle {
+        font-size: 80px; /* Adjusted font size for smaller screens */
+        letter-spacing: 2px; /* Adjust letter spacing to fit text */
+    }
+}
+
+@media (max-width: 480px) {
+    #poeticaTitle {
+        font-size: 60px; /* Further reduce font size for mobile */
+        letter-spacing: 1px; /* Reduce letter spacing for mobile */
+    }
+}
 .header2 {
     font-size: 18px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
