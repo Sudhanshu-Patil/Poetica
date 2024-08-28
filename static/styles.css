@@ -8,7 +8,6 @@ body {
     color: #30d5f3;
     font-size: 5rem;
     margin-bottom: 1rem;
-
 }
 .header-icons {
     display: flex;
@@ -79,18 +78,45 @@ body {
 }
 .bottombar {
     background-color: #26a69a;
-    width: 24%;
-    height: 25px;
+    width: 100%;
+    padding: 10px 0;
     position: fixed;
     bottom: 0;
     z-index: 2;
-}
-.bottombar p {
-    color: rgb(255, 255, 255);
-    margin: 0;
-    line-height: 25px;
     text-align: center;
+    left: 0;
 }
+
+.bottombar p {
+    color: #fff;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    #poeticaTitle {
+        font-size: 60px; /* Adjust title size for tablets */
+    }
+    
+    .bottombar p {
+        font-size: 12px;
+        white-space: normal; /* Allow text to wrap */
+    }
+}
+
+@media (max-width: 480px) {
+    #poeticaTitle {
+        font-size: 40px; /* Adjust title size for mobile phones */
+    }
+    
+    .bottombar p {
+        font-size: 10px;
+        white-space: normal; /* Allow text to wrap */
+        padding: 0 5px; /* Add padding for better readability */
+    }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -152,4 +178,9 @@ body {
         transform: translate(-50%, -50%) scale(1);
         opacity: 0;
     }
+}
+
+/* Ensure content doesn't get hidden under the footer */
+main {
+    padding-bottom: 60px;
 }
