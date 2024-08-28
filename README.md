@@ -1,7 +1,7 @@
 # Poetica: Real-time AI Poetry Generation with Emotion Visualization
 
 [![Deploy on Render](https://img.shields.io/badge/Deployed%20on-Render-blue.svg)](https://poetica-ujed.onrender.com/)
-[![GitHub](https://img.shields.io/github/license/Sudhanshu-Patil/Poetica)](https://github.com/Sudhanshu-Patil/Poetica)
+
 
 ## Overview
 
