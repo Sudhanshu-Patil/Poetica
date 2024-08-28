@@ -2,7 +2,7 @@
 
 [![Deploy on Render](https://img.shields.io/badge/Deployed%20on-Render-blue.svg)](https://poetica-ujed.onrender.com/)
 
-
+Tech Stacks/ Applications used: HTML, CSS, Python, Materialized CSS, JavaScript, Fetch API, Github, Git, Jinja2 template, Hugging Face LLM, Gemini AI API, Render, Flask, SocketIO, Cron-job
 ## Overview
 
 **Poetica** is a web application that harnesses the power of AI to generate poems based on user prompts. The app also performs emotion analysis on the generated poems using advanced machine learning models. The project is a blend of modern front-end technologies and powerful back-end services, providing users with an interactive and insightful experience.
