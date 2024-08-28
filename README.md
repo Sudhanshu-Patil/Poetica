@@ -56,5 +56,5 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 
 ## Acknowledgements
 Gemini API for providing poem generation capabilities.<br>
-Hugging Face for the emotion analysis model.<br>
+Hugging Face for the emotion analysis model.[Link](https://huggingface.co/bhadresh-savani/distilbert-base-uncased-emotion)<br>
 Render for hosting and deployment.
