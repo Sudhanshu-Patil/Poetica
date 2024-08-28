@@ -44,10 +44,11 @@ To run this project locally:
 4. **Access the application:** Open your web browser and go to ` http://127.0.0.1:5000 `
 
 ## Usage
-Enter your desired prompt in the text area.
-Click on "Generate Poem" to create a poem based on the input.
-View the generated poem and the associated emotion analysis results on the same page.
-
+Enter your desired prompt in the text area.<br>
+Click on "Generate Poem" to create a poem based on the input.<br>
+View the generated poem and the associated emotion analysis results on the same page.<br>
+*Example Usage:*<br>
+<img src="https://github.com/Sudhanshu-Patil/Poetica/blob/main/poetica_gif.gif" align='centre'>
 ## Deployment
 The application is deployed on Render, which integrates seamlessly with GitHub for continuous deployment. Any changes pushed to the main branch on GitHub will automatically trigger a new deployment on Render.
 
