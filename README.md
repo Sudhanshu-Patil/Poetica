@@ -1,6 +1,7 @@
 # Poetica: Real-time AI Poetry Generation with Emotion Visualization
 
 [![Deploy on Render](https://img.shields.io/badge/Deployed%20on-Render-blue.svg)](https://poetica-ujed.onrender.com/)
+![Poetica](https://github.com/user-attachments/assets/2a40e0cd-36aa-47a2-a0a6-832d61991a4f)
 
 Tech Stacks/ Applications used: HTML, CSS, Python, Materialized CSS, JavaScript, Fetch API, Github, Git, Jinja2 template, Hugging Face LLM, Gemini AI API, Render, Flask, SocketIO, Cron-job
 ## Overview
