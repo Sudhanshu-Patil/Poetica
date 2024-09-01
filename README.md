@@ -5,7 +5,7 @@
 AWS public elastic IP Address: ` http://13.202.146.142 ` (No SSL cerificates)
 ![Poetica](https://github.com/user-attachments/assets/2a40e0cd-36aa-47a2-a0a6-832d61991a4f)
 
-Tech Stacks/ Applications used: HTML, CSS, Python, Materialized CSS, JavaScript, Fetch API, Github, Git, Jinja2 template, Hugging Face LLM, Gemini AI API, Render, Flask, SocketIO, Cron-job
+Tech Stacks/ Applications used: HTML, CSS, Python, Materialized CSS, JavaScript, Fetch API, Github, Git, Jinja2 template, Hugging Face LLM, Gemini AI API, Render, Flask, SocketIO, AWS EC2, Cron-job
 ## Overview
 
 **Poetica** is a web application that harnesses the power of AI to generate poems based on user prompts. The app also performs emotion analysis on the generated poems using advanced machine learning models. The project is a blend of modern front-end technologies and powerful back-end services, providing users with an interactive and insightful experience.
