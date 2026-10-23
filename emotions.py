@@ -1,29 +1,31 @@
-import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import json
+import os
+import urllib.error
+import urllib.request
 
-def analyze_emotions(poem):
-    # Load the tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained("bhadresh-savani/distilbert-base-uncased-emotion")
-    model = AutoModelForSequenceClassification.from_pretrained("bhadresh-savani/distilbert-base-uncased-emotion")
-    
-    # Tokenize the input text
-    inputs = tokenizer(poem, return_tensors="pt")
-    
-    # Get the logits from the model
-    with torch.no_grad():
-        outputs = model(**inputs)
-        logits = outputs.logits
-    
-    # Apply softmax to get probabilities
-    probabilities = torch.nn.functional.softmax(logits, dim=-1)
-    
-    # Get the emotion labels from the model config
-    emotion_labels = model.config.id2label
-    
-    # Convert probabilities to a dictionary mapping emotions to scores
-    emotions = {emotion_labels[i]: prob.item() for i, prob in enumerate(probabilities[0])}
-    
-    # Sort emotions by score in descending order
-    sorted_emotions = dict(sorted(emotions.items(), key=lambda item: item[1], reverse=True))
-    top_emotion = max(sorted_emotions, key=sorted_emotions.get)
-    return top_emotion, sorted_emotions
+HF_URL = "https://router.huggingface.co/hf-inference/models/bhadresh-savani/distilbert-base-uncased-emotion"
+
+
+def parse_scores(rows):
+    """HF returns [[{label, score}, ...]] or [{label, score}, ...]; return labels sorted by score."""
+    if rows and isinstance(rows[0], list):
+        rows = rows[0]
+    return {r["label"]: r["score"] for r in sorted(rows, key=lambda r: -r["score"])}
+
+
+def analyze_emotions(text):
+    if not os.getenv("HF_TOKEN"):
+        raise RuntimeError("HF_TOKEN is not set")
+    # DistilBERT reads at most 512 tokens; poems fit, this just guards very long input
+    body = {"inputs": text[:1500], "parameters": {"top_k": 6}}
+    req = urllib.request.Request(HF_URL, data=json.dumps(body).encode(), headers={
+        "Authorization": f"Bearer {os.getenv('HF_TOKEN')}",
+        "Content-Type": "application/json",
+        "User-Agent": "Poetica/2.0",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            scores = parse_scores(json.load(resp))
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"Hugging Face error {e.code}: {e.read().decode(errors='replace')[:200]}") from e
+    return next(iter(scores)), scores
