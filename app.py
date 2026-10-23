@@ -1,15 +1,12 @@
 from flask import Flask, render_template, request, jsonify
-from flask_cors import CORS
-import google.generativeai as genai
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
-from emotions import analyze_emotions
 import os
 from dotenv import load_dotenv
+from google import genai
+from emotions import analyze_emotions
 
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route('/')
 def home():
     return render_template('index.html')  
@@ -21,11 +18,9 @@ def generate_poem():
     directive = "Write a poem based on the following prompt: "
     full_prompt = f"{directive}{user_prompt}"
     try:
-        api_key = os.getenv('GEMINI_API_KEY')
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
         # Generate poem using Gemini with prompt
-        response = model.generate_content(full_prompt)
+        response = client.models.generate_content(model="gemini-flash-latest", contents=full_prompt)
         poem = response.text.strip()
         top_emotion, emotions = analyze_emotions(poem)
         return jsonify({"poem": poem,
