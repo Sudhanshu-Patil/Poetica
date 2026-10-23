@@ -1,6 +1,6 @@
 # Poetica: an AI poetry studio that listens for feeling
 
-Poetica writes poems with an LLM and reads how they feel with a separate emotion model. In **Steer to a mood** mode the two work as a loop: Llama writes a draft, DistilBERT scores its emotions, and Llama revises from that feedback until the target mood wins.
+Poetica writes poems with an LLM and reads how they feel with a separate critic call. In **Steer to a mood** mode the two work as a loop: the poet drafts, the critic scores its emotions, and the poet revises from that feedback until the target mood wins.
 
 Runs entirely on free tiers.
 
@@ -10,29 +10,26 @@ Runs entirely on free tiers.
 - **Live streaming:** poems stream in token by token as they are written.
 - **Refine in conversation:** "make it darker", "end on hope", "make it rhyme". Every revision is kept as a version you can flip back to.
 - **Forms and styles:** free verse, haiku, sonnet, limerick, ghazal, villanelle, in any language and in the style of any poet.
-- **Emotion breakdown:** a DistilBERT reading of every poem; the page colour follows the poem's mood.
+- **Emotion breakdown:** an emotion reading of every poem; the page colour follows the poem's mood.
 - **Read aloud and share:** read the poem aloud using the browser's built-in speech, or download it as an image card.
 
 ## Stack
 
 | Part | Tech | Cost |
 | --- | --- | --- |
-| Poems | Llama 3.3 70B on [Groq](https://console.groq.com) | Free tier |
-| Emotions | [bhadresh-savani/distilbert-base-uncased-emotion](https://huggingface.co/bhadresh-savani/distilbert-base-uncased-emotion) via Hugging Face Inference | Free tier |
-| Server | Flask (Python), using the standard library to call both APIs | Free |
+| Poems | GPT-OSS 120B on [Groq](https://console.groq.com) | Free tier |
+| Emotions | Same model as a JSON-mode critic on Groq | Free tier |
+| Server | Flask (Python), using the standard library to call Groq | Free |
 | Front end | HTML, CSS and vanilla JavaScript, no framework | Free |
 | Hosting | Vercel | Free (Hobby) |
 
 ## Run locally
 
-1. Get two free keys:
-   - Groq: https://console.groq.com/keys
-   - Hugging Face: https://huggingface.co/settings/tokens (a **Read** token, or a fine-grained token with "Make calls to Inference Providers")
+1. Get a free Groq key: https://console.groq.com/keys
 2. Create a `.env` file:
    ```
    GROQ_API_KEY=your-groq-key
-   HF_TOKEN=your-hugging-face-token
-   # optional: GROQ_MODEL=llama-3.3-70b-versatile
+   # optional: GROQ_MODEL=openai/gpt-oss-120b
    ```
 3. Install and run:
    ```bash
@@ -45,7 +42,7 @@ Tests (no keys or network needed): `python test_app.py`
 
 ## Deploy
 
-Vercel deploys the Flask app from `main`. Add `GROQ_API_KEY` and `HF_TOKEN` under **Project → Settings → Environment Variables**.
+Vercel deploys the Flask app from `main`. Add `GROQ_API_KEY` under **Project → Settings → Environment Variables**.
 
 ## License
 

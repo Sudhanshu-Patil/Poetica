@@ -205,7 +205,7 @@ function syncMode() {
     $('moodField').hidden = !steer;
     $('goBtn').textContent = steer ? 'Steer the poem' : 'Write the poem';
     $('modeHint').textContent = steer
-        ? 'Llama writes, DistilBERT reads the feeling, and Llama revises until your mood wins (up to 4 rounds).'
+        ? 'The poet drafts, a separate critic reads the feeling, and the poet revises until your mood wins (up to 4 rounds).'
         : 'The poem streams in as it is written, then gets an emotion reading.';
     if (steer) setMood(composer.target.value);
 }

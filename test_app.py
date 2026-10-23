@@ -2,13 +2,13 @@
 import json
 
 import app
-from emotions import parse_scores
 
 
-def test_parse_scores():
-    rows = [{"label": "joy", "score": 0.2}, {"label": "sadness", "score": 0.7}]
-    assert list(parse_scores([rows])) == ["sadness", "joy"]
-    assert parse_scores(rows) == parse_scores([rows])
+def test_normalize():
+    scores = app.normalize({"sadness": 3, "joy": 1, "boredom": 9, "fear": -2, "love": None})
+    assert list(scores)[:2] == ["sadness", "joy"] and set(scores) == app.MOODS
+    assert abs(sum(scores.values()) - 1) < 1e-9 and scores["fear"] == 0
+    assert sum(app.normalize({}).values()) == 0  # all-zero reading doesn't divide by zero
 
 
 def test_build_messages():
