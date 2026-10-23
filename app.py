@@ -6,27 +6,30 @@ import urllib.request
 from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, render_template, request, stream_with_context
 
-from emotions import analyze_emotions
-
 load_dotenv()
 
 app = Flask(__name__)
 
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 FORMS = {"free verse", "haiku", "sonnet", "limerick", "ghazal", "villanelle"}
 MOODS = {"joy", "sadness", "love", "anger", "fear", "surprise"}
 MAX_ROUNDS = 4
 SYSTEM = ("You are Poetica, a gifted poet. Reply with only the poem: a short title on the first line, "
           "a blank line, then the poem. No markdown, no quotation marks, no commentary.")
+CRITIC = ("You are an emotion classifier. Rate how strongly the text expresses each of: "
+          "joy, love, sadness, anger, fear, surprise. Reply with only a JSON object mapping "
+          'each of those six labels to a score from 0 to 1, e.g. {"joy": 0.7, "love": 0.2, ...}.')
 
 
-def groq(messages, stream=False):
+def groq(messages, stream=False, system=SYSTEM, temperature=0.9, json_mode=False):
     """Open a chat completion request to Groq (OpenAI-compatible API)."""
     if not os.getenv("GROQ_API_KEY"):
         raise RuntimeError("GROQ_API_KEY is not set")
-    body = {"model": MODEL, "messages": [{"role": "system", "content": SYSTEM}, *messages],
-            "temperature": 0.9, "stream": stream}
+    body = {"model": MODEL, "messages": [{"role": "system", "content": system}, *messages],
+            "temperature": temperature, "stream": stream}
+    if json_mode:
+        body["response_format"] = {"type": "json_object"}
     req = urllib.request.Request(GROQ_URL, data=json.dumps(body).encode(), headers={
         "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",
         "Content-Type": "application/json",
@@ -41,6 +44,20 @@ def groq(messages, stream=False):
 def complete(messages):
     with groq(messages) as resp:
         return json.load(resp)["choices"][0]["message"]["content"].strip()
+
+
+def normalize(raw):
+    """Keep the six moods, clamp to >= 0, scale to sum 1, sort by score."""
+    scores = {m: max(float(raw.get(m) or 0), 0.0) for m in MOODS}
+    total = sum(scores.values()) or 1
+    return {m: s / total for m, s in sorted(scores.items(), key=lambda kv: -kv[1])}
+
+
+def analyze_emotions(text):
+    with groq([{"role": "user", "content": text[:4000]}], system=CRITIC, temperature=0, json_mode=True) as resp:
+        raw = json.loads(json.load(resp)["choices"][0]["message"]["content"])
+    scores = normalize(raw)
+    return next(iter(scores)), scores
 
 
 def stream_text(resp):
