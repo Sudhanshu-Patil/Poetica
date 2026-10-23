@@ -29,15 +29,15 @@ body {
 }
 @media (max-width: 768px) {
     #poeticaTitle {
-        font-size: 80px; /* Adjusted font size for smaller screens */
-        letter-spacing: 2px; /* Adjust letter spacing to fit text */
+        font-size: 80px;
+        letter-spacing: 2px;
     }
 }
 
 @media (max-width: 480px) {
     #poeticaTitle {
-        font-size: 60px; /* Further reduce font size for mobile */
-        letter-spacing: 1px; /* Reduce letter spacing for mobile */
+        font-size: 60px;
+        letter-spacing: 1px;
     }
 }
 .header2 {
@@ -66,6 +66,12 @@ body {
     position: relative;
     white-space: pre-wrap;
     overflow-y: auto;
+}
+@media (max-width: 480px) {
+    #poemOutput {
+        font-size: 0.7rem;
+        padding: 0.8rem;
+    }
 }
 #emotionOutput {
     display: flex;
