@@ -3,51 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poetica</title>
-    <!-- Favicon -->
+    <title>Poetica — AI Poetry Studio</title>
+    <meta name="description" content="Write poems with AI, steer them toward a mood, and see how they feel.">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <!-- Materialize CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="center-align">
-            <h1 class="header" id="poeticaTitle">🎼 POETICA 🎼</h1>
-            <h6 class="header2"> Explore the world of AI Poetry</h6>
-        </header>
+    <header class="masthead">
+        <a class="wordmark" href="/">Poetica</a>
+        <p class="tagline">An AI poetry studio that listens for feeling</p>
+    </header>
 
-        <!-- Main Content -->
-        <main class="center-align">
-            <div class="input-field">
-                <textarea id="poemPrompt" class="materialize-textarea" placeholder="Enter your poem prompt here..." style="font-size: 1.2rem;"></textarea>
-                <label for="poemPrompt" style="font-size: large;">Poem Prompt</label>
+    <main class="studio">
+        <form id="composer" class="composer" autocomplete="off">
+            <label class="field">
+                <span class="field-label">What should the poem be about?</span>
+                <textarea id="prompt" name="prompt" rows="3" maxlength="1000" required
+                    placeholder="The last train home, rain on the window, a city falling asleep…"></textarea>
+            </label>
+
+            <fieldset class="field">
+                <legend class="field-label">Form</legend>
+                <div class="chips">
+                    <label class="chip"><input type="radio" name="form" value="free verse" checked><span>Free verse</span></label>
+                    <label class="chip"><input type="radio" name="form" value="haiku"><span>Haiku</span></label>
+                    <label class="chip"><input type="radio" name="form" value="sonnet"><span>Sonnet</span></label>
+                    <label class="chip"><input type="radio" name="form" value="limerick"><span>Limerick</span></label>
+                    <label class="chip"><input type="radio" name="form" value="ghazal"><span>Ghazal</span></label>
+                    <label class="chip"><input type="radio" name="form" value="villanelle"><span>Villanelle</span></label>
+                </div>
+            </fieldset>
+
+            <div class="field-row">
+                <label class="field">
+                    <span class="field-label">Language</span>
+                    <input name="language" list="languages" maxlength="40" placeholder="English">
+                    <datalist id="languages">
+                        <option value="English"><option value="Hindi"><option value="Marathi"><option value="Urdu">
+                        <option value="Spanish"><option value="French"><option value="Japanese"><option value="German">
+                    </datalist>
+                </label>
+                <label class="field">
+                    <span class="field-label">In the style of <em>(optional)</em></span>
+                    <input name="poet" maxlength="60" placeholder="Rumi, Emily Dickinson, Gulzar…">
+                </label>
             </div>
-            <a id="generateBtn" class="waves-effect waves-light btn-large">Generate Poem</a>
-            <div id="poemOutput" class="card-panel blue lighten-5 mt-4"></div>
-            <div id="emotionOutput" class="emotion-animation mt-4"></div>
-        </main>
-    </div>
-    <script>
-        document.getElementById('poemPrompt').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                document.getElementById('generateBtn').click(); // Triggers the Generate Poem button
-            }
-        });
-    </script>
-    
-    <!-- Footer -->    
-    <footer>
-        <div class="bottombar">
-            <p>Made with ❤️ by Sudhanshu. Powered by Gemini AI</p>
-        </div>
+
+            <fieldset class="field">
+                <legend class="field-label">Mode</legend>
+                <div class="segmented">
+                    <label><input type="radio" name="mode" value="write" checked><span>Write freely</span></label>
+                    <label><input type="radio" name="mode" value="steer"><span>Steer to a mood</span></label>
+                </div>
+                <p class="hint" id="modeHint">The poem streams in as it is written, then gets an emotion reading.</p>
+            </fieldset>
+
+            <fieldset class="field" id="moodField" hidden>
+                <legend class="field-label">Target mood</legend>
+                <div class="chips moods">
+                    <label class="chip" data-mood="joy"><input type="radio" name="target" value="joy" checked><span>Joy</span></label>
+                    <label class="chip" data-mood="love"><input type="radio" name="target" value="love"><span>Love</span></label>
+                    <label class="chip" data-mood="sadness"><input type="radio" name="target" value="sadness"><span>Sadness</span></label>
+                    <label class="chip" data-mood="anger"><input type="radio" name="target" value="anger"><span>Anger</span></label>
+                    <label class="chip" data-mood="fear"><input type="radio" name="target" value="fear"><span>Fear</span></label>
+                    <label class="chip" data-mood="surprise"><input type="radio" name="target" value="surprise"><span>Surprise</span></label>
+                </div>
+            </fieldset>
+
+            <button class="primary" id="goBtn" type="submit">Write the poem</button>
+        </form>
+
+        <section class="stage" aria-label="Poem">
+            <div class="empty" id="empty">
+                <p class="empty-line">“Poetry is when an emotion has found its thought and the thought has found words.”</p>
+                <p class="empty-by">— Robert Frost</p>
+            </div>
+
+            <div id="work" hidden>
+                <nav class="versions" id="versions" aria-label="Versions"></nav>
+
+                <article class="poem" aria-live="polite">
+                    <h2 class="poem-title" id="poemTitle"></h2>
+                    <div class="poem-body" id="poemBody"></div>
+                    <p class="status" id="status"></p>
+                </article>
+
+                <div class="toolbar" id="toolbar">
+                    <button type="button" class="ghost" id="speakBtn">Read aloud</button>
+                    <button type="button" class="ghost" id="copyBtn">Copy</button>
+                    <button type="button" class="ghost" id="cardBtn">Download card</button>
+                </div>
+
+                <section class="panel" id="steerPanel" hidden>
+                    <h3 class="panel-title">Steering rounds</h3>
+                    <ol class="rounds" id="rounds"></ol>
+                </section>
+
+                <section class="panel" id="emotionPanel" hidden>
+                    <h3 class="panel-title">How it feels <span class="panel-note">DistilBERT emotion model</span></h3>
+                    <div class="bars" id="bars"></div>
+                </section>
+
+                <form class="refine" id="refine" autocomplete="off">
+                    <label class="field-label" for="instruction">Refine this poem</label>
+                    <div class="refine-row">
+                        <input id="instruction" name="instruction" maxlength="300" placeholder="Make it darker, end on hope, add a rhyme…">
+                        <button class="primary small" type="submit">Revise</button>
+                    </div>
+                    <div class="suggestions">
+                        <button type="button" data-say="Make it darker">Darker</button>
+                        <button type="button" data-say="Make it more hopeful">More hopeful</button>
+                        <button type="button" data-say="Make it shorter and sharper">Shorter</button>
+                        <button type="button" data-say="Make it rhyme">Make it rhyme</button>
+                        <button type="button" data-say="Use more vivid, concrete imagery">More vivid</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        Made with care by Sudhanshu · Poems by Llama 3.3 on Groq · Feelings by DistilBERT
     </footer>
-    <!-- Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- Custom JS -->
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
