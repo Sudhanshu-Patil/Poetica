@@ -1,0 +1,4 @@
+# Static deploy only; the Flask app (torch/transformers) is too large for Vercel functions
+app.py
+emotions.py
+requirements.txt
